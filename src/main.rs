@@ -1,3 +1,8 @@
+use crate::router::start_server;
+
 pub mod router;
 
-fn main() {}
+#[tokio::main]
+async fn main() {
+    start_server().await.unwrap_err();
+}
