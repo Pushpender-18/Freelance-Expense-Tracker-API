@@ -18,12 +18,13 @@ pub async fn verfiy_auth(req: Request, next: Next) -> Result<Response<Body>, Sta
     match req.headers().get(header::AUTHORIZATION) {
         Some(auth_header) => match auth_header.to_str() {
             Ok(bearer_token) => {
-				let json_webtoken: String = bearer_token.chars().skip(7).collect();
+                let json_webtoken: String = bearer_token.chars().skip(7).collect();
 
-				match verify_jwt(&json_webtoken) {
-                Some(_claims) => Ok(next.run(req).await),
-                _ => Err(StatusCode::FORBIDDEN),
-            }},
+                match verify_jwt(&json_webtoken) {
+                    Some(_claims) => Ok(next.run(req).await),
+                    _ => Err(StatusCode::FORBIDDEN),
+                }
+            }
             Err(error) => {
                 println!("[ERROR] Parsing JWT Token to String: {}", error);
                 Err(StatusCode::INTERNAL_SERVER_ERROR)
@@ -47,9 +48,7 @@ pub fn generate_jwt(user_id: Uuid) -> Option<String> {
         &claim,
         &EncodingKey::from_secret(secret.as_bytes()),
     ) {
-        Ok(token) => {
-            Some(token)
-        }
+        Ok(token) => Some(token),
         Err(error) => {
             println!("[ERROR] JWT Token Generation failed: {}", error);
             None

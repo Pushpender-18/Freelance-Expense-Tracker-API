@@ -1,14 +1,15 @@
+use crate::{repo::expenses::delete_expense, router::start_server};
 use sqlx::{PgPool, Pool, Postgres};
-use crate::{router::start_server};
 
+pub mod handlers;
 pub mod models;
 pub mod repo;
 pub mod router;
-pub mod handlers;
 
 #[tokio::main]
 async fn main() {
-    let _pool = db_connection().await;
+    let _pool = db_connection().await.unwrap(); // Fix unwrap
+    delete_expense(2, &_pool).await.unwrap();
     start_server().await.unwrap_err();
 }
 
