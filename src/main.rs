@@ -1,4 +1,3 @@
 pub mod router;
 
-fn main() {
-}
+fn main() {}
