@@ -1,3 +1,5 @@
+use serde::Deserialize;
+use serde::Serialize;
 use sqlx::types::chrono::DateTime;
 use sqlx::types::chrono::Utc;
 use uuid::Uuid;
@@ -30,3 +32,19 @@ pub struct RefreshTokens {
     pub expires_at: DateTime<Utc>,
     pub revoked_at: DateTime<Utc>,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct Claims {
+    pub sub: String,
+    exp: i64
+}
+
+impl Claims {
+    pub fn new(id: Uuid, exp: i64) -> Claims {
+        Claims {
+            sub: id.to_string(),
+            exp: exp
+        }
+    }
+}
+
